@@ -3,10 +3,11 @@ Markov Chain Monte Carlo (MCMC) model to analyse data given large-scale missingn
 
 # LoadDataContinent.R
 R script processes surveillance data into an array suitable for modelling, aggregating cases by month, year, destinations, and SNP types.
+- The SNP Type Classification calculate the probability of SNPs being typed, matching SNP values to a predefined list (as in SNPSort.R).
+- The Travel Type Classification assigns cases to domestic, travel or unknown. Joins continent information to destinations and aggregates cases by continent for destinations with fewer than 20 cases.
 
-The SNP Type Classification calculate the probability of SNPs being typed, matching SNP values to a predefined list (aggregating SNP with the same cluster)
-
-The Travel Type Classification assigns cases to domestic, travel or unknown. Joins continent information to destinations and aggregates cases by continent for destinations with fewer than 20 cases.
+# LoadIPSContinent.R
+R script processes International Passenger Survey (IPS) data to calculate the total number of visits for each destination across months and years. The data is integrated with continent and population data to compute visits to domestic and international destinations, storing the final results in a structured array.
 
 # InitialValues.R
 This section loads initial data from StartingValues.RData. This includes surveillance and IPS (International Passenger Survey) data.
