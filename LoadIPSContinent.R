@@ -1,63 +1,80 @@
-# libraries
+# This script processes international travel data by:
+#  - Summarising visits per country and month
+#  - Mapping destinations to continents
+#  - Adjusting data for domestic travel
+#  - Storing processed data in an array format
+
+# Load required libraries
 library(tidyverse)
 
-# load data
+# Load International Passenger Survey (IPS) data
 df <- read_csv("IPS_16_19.csv")
 
-# compute the total number of visits for each country and month
+# Compute total number of visits for each country and month
 df <- df %>%
   group_by(Year, Month, Country) %>%
-  summarize(Visits = sum(Weight)) %>% 
-  rename(Destination = Country)
+  summarize(Visits = sum(Weight), .groups = "drop") %>% 
+  rename(Destination = Country)  # Rename column for consistency
 
-# load continent data 
+### MAP COUNTRIES TO CONTINENTS ####
+# Load continent mapping data
 continents <- read_csv("CountriesContinents.csv")
 colnames(continents) <- c("Continent", "Destination")
-# join continents to ips 
+
+# Merge continent data with IPS data
 df <- left_join(df, continents, by = "Destination")
-# replace destination with continent 
+
+# If a destination is not in the predefined list, replace it with its continent
 df$Destination <- ifelse(df$Destination %in% destinations, df$Destination, df$Continent)
-# compute the new total number of visits for each destination and month
+
+# Recompute total visits, now aggregated by continent (or country if large enough)
 df <- df %>%
   group_by(Year, Month, Destination) %>%
-  summarize(Visits = sum(Visits)) 
+  summarize(Visits = sum(Visits), .groups = "drop")
 
-
-# load population data
+### INCORPORATE POPULATION ####
+# Load population data for the corresponding years
 pop <- read_csv("Population_16_19.csv")
+
+# Merge population data into the dataset based on the Year
 df <- left_join(df, pop, by = "Year")
-# compute the total number of visits for each month
+
+# Compute the total number of visits for each month
 df_visits <- df %>%
   group_by(Year, Month) %>%
-  summarize(Total_Visits = sum(Visits))
-# compute the number of people who stayed at home for each month
+  summarize(Total_Visits = sum(Visits), .groups = "drop")
+
+# Compute the number of people who stayed at home (domestic travelers)
 df_domestic <- df_visits %>%
   left_join(pop, by = "Year") %>%
-  mutate(Domestic = Population - Total_Visits) %>%
-  mutate(Destination = "Domestic", Visits = Domestic) %>%
-  dplyr::select(Year, Month, Destination, Visits) 
+  mutate(Domestic = Population - Total_Visits,  # Calculate domestic stayers
+         Destination = "Domestic", 
+         Visits = Domestic) %>%
+  dplyr::select(Year, Month, Destination, Visits)  # Select relevant columns
 
+# Append domestic travel data to the dataset
 df <- bind_rows(df, df_domestic)
 
-# set up array to store data
+### STORE DATA IN AN ARRAY ####
+# Initialise a storage array for visits
 n <- array(0, c(dest + 1, timepoints))
 
-for(t in 1 : timepoints){
-  for (i in 1 : (dest + 1)){
-    if(i <= dest){ 
+# Populate the array with visit data for each time point
+for (t in 1:timepoints) {
+  for (i in 1:(dest + 1)) {
+    
+    # Identify the corresponding data rows
+    if (i <= dest) { 
       wh <- which(df$Month == getMonth(t) & df$Year == years[getYear(t)] & df$Destination == destinations[i])
-    }
-    else {
+    } else {
       wh <- which(df$Month == getMonth(t) & df$Year == years[getYear(t)] & df$Destination == "Domestic")
-    }    
-    if(length(wh) == 1){      
-      n[i,t] <- df$Visits[wh]     
-    }    
-    else if(length(wh) > 1){
-      print('stop')
+    }
+    
+    # Store visit counts in the array
+    if (length(wh) == 1) {      
+      n[i, t] <- df$Visits[wh]     
+    } else if (length(wh) > 1) {
+      print("Error: Multiple entries detected")
     }
   }
-  
 }
-
-
