@@ -56,5 +56,5 @@ This script initializes the key variables for the model, including prior distrib
 4. **Run the Model**: Execute `main_model.R` to start the **MCMC sampling** and generate posterior parameter estimates. 🔄💻
 5. **Visualise Results**: After running the model, use `ggplot2` to create plots or export the results for further analysis. 📊
 
-### Customizing the Model
+### Customising the Model
 Modify the **prior distributions**, **MCMC parameters**, or **initial values** as needed. For example, you can adjust the **lambda**, **mu**, or **p** priors to reflect different assumptions about disease spread and travel patterns. 🛠️
