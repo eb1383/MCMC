@@ -8,7 +8,7 @@
 library(tidyverse)
 
 # Load International Passenger Survey (IPS) data
-df <- read_csv("IPS_16_19.csv")
+df <- read_csv("")
 
 # Compute total number of visits for each country and month
 df <- df %>%
