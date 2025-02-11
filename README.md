@@ -7,7 +7,7 @@ To run the scripts in this repository, you'll need the following R packages:
 
 - **MCMCpack** 📉: For Metropolis-Hastings MCMC sampling.
 - **mvtnorm** 📐: For working with multivariate normal distributions.
-- **ggplot2** 📈: For creating data visualizations and plots.
+- **ggplot2** 📈: For creating data visualisations and plots.
 
 You can install them with these commands:
 
