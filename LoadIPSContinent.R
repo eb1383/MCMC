@@ -18,7 +18,7 @@ df <- df %>%
 
 ### MAP COUNTRIES TO CONTINENTS ####
 # Load continent mapping data
-continents <- read_csv("CountriesContinents.csv")
+continents <- read_csv("")
 colnames(continents) <- c("Continent", "Destination")
 
 # Merge continent data with IPS data
