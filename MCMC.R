@@ -20,8 +20,8 @@ lddirichlet <- function(x, a){
 }
 
 # load data
-source("LoadDataContinent.R")
-source("LoadIPSContinent.R")
+source("")
+source("")
 # unit of analysis becomes trips per 1000 people
 n <- n/1000 
 # create n for number of years not months
