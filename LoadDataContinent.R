@@ -8,7 +8,7 @@ library(readr)
 library(tidyverse)
 
 # Load Shigella case data
-df <- read_csv("Shigella_16_19.csv")
+df <- read_csv("")
 
 ### SORT SNP TYPES ####
 # Calculate the probability of having a typed SNP
