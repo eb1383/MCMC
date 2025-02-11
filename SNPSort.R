@@ -4,7 +4,7 @@ library(reshape2)
 
 ### PREPARE THE DATA ####
 # load data 
-df <- read_csv("Shigella_16_19.csv")
+df <- read_csv("")
 df$Destination <- ifelse(df$Travel == 'Non-Travel', 'Domestic', df$Destination)
 # compute the total number of visits for each country and month
 df <- df %>%
@@ -19,7 +19,7 @@ df_freq_dest <- df %>%
   arrange(desc(N))
 
 # load continent data 
-continents <- read_csv("CountriesContinents.csv")
+continents <- read_csv("")
 colnames(continents) <- c("Continent", "Destination")
 # join continents to data 
 df <- left_join(df, continents, by = "Destination")
